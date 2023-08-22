@@ -1,0 +1,28 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Felipe Cabral", email = "felipe.benites@gmail.com"},
+]
+dependencies = [
+    "langchain>=0.0.270",
+    "PyPDF2",
+    "python-dotenv",
+    "streamlit",
+    "openai",
+    "faiss-cpu",
+    "altair",
+    "tiktoken",
+    "huggingface-hub",
+    "InstructorEmbedding>=1.0.1",
+    "sentence-transformers>=2.2.2",
+]
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
