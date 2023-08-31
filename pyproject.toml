@@ -17,6 +17,8 @@ dependencies = [
     "huggingface-hub",
     "InstructorEmbedding>=1.0.1",
     "sentence-transformers>=2.2.2",
+    "datetime>=5.2",
+    "selenium>=4.11.2",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
