@@ -1,6 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
+from pdfminer.high_level import extract_pages, extract_text
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
 from langchain.vectorstores import FAISS
@@ -15,6 +16,28 @@ from htmlTemplates import css, bot_template, user_template
 load_dotenv()
 
 
+# def get_pdf_text(pdf_docs):
+#     """
+#     Extract text from uploaded PDF documents.
+#     If there's any error in reading a PDF, an appropriate message will be displayed.
+#     """
+#     text = ""
+#     for pdf in pdf_docs:
+#         try:
+#             pdf_reader = PdfReader(pdf)
+#             for page in pdf_reader.pages:
+#                 extracted_text = page.extract_text()
+#                 if extracted_text:  # Check if text extraction was successful
+#                     text += extracted_text
+#                 else:  # Sometimes, PyPDF2 may not be able to extract text
+#                     st.warning(
+#                         f"Failed to extract text from one of the pages in {pdf.name}."
+#                     )
+#         except Exception as e:
+#             st.error(f"Error reading the PDF {pdf.name}: {str(e)}")
+#     return text
+
+
 def get_pdf_text(pdf_docs):
     """
     Extract text from uploaded PDF documents.
@@ -23,15 +46,7 @@ def get_pdf_text(pdf_docs):
     text = ""
     for pdf in pdf_docs:
         try:
-            pdf_reader = PdfReader(pdf)
-            for page in pdf_reader.pages:
-                extracted_text = page.extract_text()
-                if extracted_text:  # Check if text extraction was successful
-                    text += extracted_text
-                else:  # Sometimes, PyPDF2 may not be able to extract text
-                    st.warning(
-                        f"Failed to extract text from one of the pages in {pdf.name}."
-                    )
+            text = extract_text(pdf)
         except Exception as e:
             st.error(f"Error reading the PDF {pdf.name}: {str(e)}")
     return text
@@ -46,20 +61,20 @@ def get_text_chunks(text):
 
 
 def get_vectorstore(text_chunks):
-    # embeddings = OpenAIEmbeddings()
-    embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
+    embeddings = OpenAIEmbeddings()
+    # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large")
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
 
 
 def get_conversation_chain(vectorstore):
-    # llm = ChatOpenAI()
+    llm = ChatOpenAI()
     # llm = ChatOpenAI(model="gpt-4")
 
-    llm = HuggingFaceHub(
-        repo_id="google/flan-t5-xxl",
-        model_kwargs={"temperature": 0.5, "max_length": 512},
-    )
+    # llm = HuggingFaceHub(
+    #     repo_id="google/flan-t5-xxl",
+    #     model_kwargs={"temperature": 0.5, "max_length": 512},
+    # )
 
     memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     conversation_chain = ConversationalRetrievalChain.from_llm(
