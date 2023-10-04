@@ -20,6 +20,9 @@ dependencies = [
     "datetime>=5.2",
     "selenium>=4.11.2",
     "pdfminer-six>=20221105",
+    "pinecone-client>=2.2.4",
+    "uuid>=1.30",
+    "pypdf>=3.16.2",
 ]
 requires-python = ">=3.11"
 readme = "README.md"
@@ -31,4 +34,10 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm.scripts]
-start = "streamlit run app.py"
+app = "streamlit run app.py"
+notebook = "jupyter lab --app-dir /home/cabral/tbot/__pypackages__/3.11/lib/jupyterlab"
+
+[tool.pdm.dev-dependencies]
+notebook = [
+    "jupyter>=1.0.0",
+]

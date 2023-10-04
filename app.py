@@ -1,6 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
-from PyPDF2 import PdfReader
+
+# from PyPDF2 import PdfReader
 from pdfminer.high_level import extract_pages, extract_text
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
@@ -15,6 +16,7 @@ from htmlTemplates import css, bot_template, user_template
 
 load_dotenv()
 
+# For PyPDF2 usage, pdfminer showed better results with my documents
 
 # def get_pdf_text(pdf_docs):
 #     """
